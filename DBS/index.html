@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Tank Monitoring Dashboard</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+<header>
+    <h1>Tank Monitoring Dashboard</h1>
+    <p>Dashboard Subsystem (DBS)</p>
+</header>
+
+<main>
+
+    <!-- Stato del sistema -->
+    <section class="card">
+        <h2>System State</h2>
+        <span id="system-state" class="state not-available">
+            NOT AVAILABLE
+        </span>
+    </section>
+
+    <!-- Valvola -->
+    <section class="card">
+        <h2>Valve Opening</h2>
+        <div class="value">
+            <span id="valve-value">--</span> %
+        </div>
+    </section>
+
+     <!-- Pannello di controllo -->
+    <section class="card">
+        <h2>Control Panel</h2>
+
+        <div class="control-group">
+            <button id="mode-btn">Switch to AUTOMATIC</button>
+        </div>
+
+        <div class="control-group">
+            <label for="valve-slider">
+                Valve Opening (MANUAL mode)
+            </label>
+            <input
+                type="range"
+                id="valve-slider"
+                min="0"
+                max="100"
+                value="0"
+                disabled
+            >
+            <span id="slider-value">0%</span>
+        </div>
+    </section>
+
+    <!-- Grafico livello acqua -->
+    <section class="card wide">
+        <h2>Rainwater Level (last N measurements)</h2>
+        <canvas id="levelChart"></canvas>
+    </section>
+
+</main>
+
+<footer>
+    <p>Embedded Systems & IoT - Dashboard Subsystem</p>
+</footer>
+
+</body>
+<!-- script.js -->
+<script src="script.js"></script>
+</html>
