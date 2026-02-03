@@ -12,7 +12,7 @@
 // PERIOD
 
 #define PERIOD 10
-
+#define BUTTON_TASK_PERIOD 10
 
 // LCD
 

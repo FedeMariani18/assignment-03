@@ -1,9 +1,11 @@
 #include <Arduino.h>
 #include "kernel/config.h"
-#include "kernel/scheduler.h"
+#include "kernel/Scheduler.h"
 
 #include "model/HWPlatform.h"
-#include "model/context.h"
+#include "model/Context.h"
+
+#include "task/ChangeModeButtonTask.h"
 
 Scheduler sched;
 HWPlatform hWPlatform;
@@ -19,7 +21,8 @@ void setup() {
 
   hWPlatform.init();
 
-
+  Task* changeModeButtonTask = new ChangeModeButtonTask(context, hWPlatform.getChangeModeButton());
+  changeModeButtonTask->init(BUTTON_TASK_PERIOD);
 }
 
 void loop() {
