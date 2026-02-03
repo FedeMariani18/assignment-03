@@ -13,4 +13,11 @@
 #define SONAR_TASK_PERIOD 100
 #define COMUNICATION_TASK_PERIOD 100
 
+#define MQTT_SERVER "broker.mqtt-dashboard.com"
+#define MQTT_PORT 1883
+#define MQTT_TOPIC "tms/waterLevel"
+#define SSID ""
+#define PASSWORD ""
+
+
 #endif
