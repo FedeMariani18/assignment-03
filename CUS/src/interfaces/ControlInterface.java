@@ -16,4 +16,12 @@ public interface ControlInterface {
     boolean isConnected();
 
     List<Integer> getMeasurements(int n);
+
+    void setWaterLevel(float waterLevel);
+
+    void setLastMessageTimeFromTMS(long time);
+
+    float getWaterLevel();
+
+    long getLastMessageTimeFromTMS();
 }

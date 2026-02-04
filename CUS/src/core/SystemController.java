@@ -13,6 +13,8 @@ public class SystemController implements ControlInterface {
     private State mode = State.AUTOMATIC;
     private int valve = 0;
     private boolean connected = true;
+    private float waterLevel;
+    private long lastMessageTimeFromTMS;
 
     private Random rand = new Random();
 
@@ -53,5 +55,25 @@ public class SystemController implements ControlInterface {
         }
 
         return values;
+    }
+
+    @Override
+    public void setWaterLevel(float waterLevel) {
+        this.waterLevel = waterLevel;
+    }
+
+    @Override
+    public void setLastMessageTimeFromTMS(long time) {
+        this.lastMessageTimeFromTMS = time;
+    }
+
+    @Override
+    public float getWaterLevel() {
+        return this.waterLevel;
+    }
+
+    @Override
+    public long getLastMessageTimeFromTMS() {
+        return this.lastMessageTimeFromTMS;
     }
 }
