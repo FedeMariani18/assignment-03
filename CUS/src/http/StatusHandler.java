@@ -21,6 +21,9 @@ public class StatusHandler implements HttpHandler {
     public void handle(HttpExchange exchange /*http connection with all his information*/) {
 
         try {
+            //adding the CORS header
+            Functions.addCorsHeaders(exchange);
+            
             //the request must to be GET, otherwise send an Error
             if (!exchange.getRequestMethod().equals("GET")) {
                 exchange.sendResponseHeaders(405, -1);
@@ -35,14 +38,12 @@ public class StatusHandler implements HttpHandler {
                     + "\"connected\":" + controller.isConnected()
                     + "}";
 
-            exchange.getResponseHeaders()
-                    .add("Content-Type", "application/json");
+            exchange.getResponseHeaders().add("Content-Type", "application/json");
+            exchange.sendResponseHeaders(200, json.length());   //prepare the header of the response
 
-            exchange.sendResponseHeaders(200, json.length());   //send the json
-
-            OutputStream os = exchange.getResponseBody();
-            os.write(json.getBytes());
-            os.close();
+            OutputStream os = exchange.getResponseBody();   //create a channel for writing the data in the response 
+            os.write(json.getBytes());  
+            os.close(); //close the channel and send the data
 
         } catch (Exception e) {
             e.printStackTrace();
