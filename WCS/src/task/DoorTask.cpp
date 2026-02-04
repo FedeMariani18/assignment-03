@@ -5,9 +5,23 @@ context(context), motor(motor), gradi(gradi){
     currentAngle = 0;
 }
 
+void DoorTask::init(int period) {
+    Task::init(period);
+    motor->on();
+}
+
 void DoorTask::tick(){
     State s = context.getState();
     int target;
+
+    if (s == State::UNCONNECTED) {
+        motor->off();
+        return;
+    }
+
+    if (!motor->isOn()) {
+        motor->on();
+    }
 
     if (s == State::MANUAL || s == State::AUTOMATIC) {
         target = gradi;

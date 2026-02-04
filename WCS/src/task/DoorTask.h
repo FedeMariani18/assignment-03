@@ -8,6 +8,7 @@
 class DoorTask : public Task{
 public:
     DoorTask(Context& context, ServoMotor* motor, int& gradi);
+    void init(int period);
     void tick() override;
 
 private:

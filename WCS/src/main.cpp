@@ -12,7 +12,7 @@
 #include "task/DoorTask.h"
 
 Scheduler sched;
-HWPlatform hWPlatform;
+HWPlatform* hWPlatform;
 Context context;
 
 int degrees;
@@ -20,24 +20,26 @@ int degrees;
 int myFunction(int, int);
 
 void setup() {
+  Serial.begin(115200);
   // put your setup code here, to run once:
   sched.init(PERIOD);
 
-  hWPlatform.init();
+  hWPlatform = new HWPlatform();
+  hWPlatform->init();
 
-  Task* changeModeButtonTask = new ChangeModeButtonTask(context, hWPlatform.getChangeModeButton());
+  Task* changeModeButtonTask = new ChangeModeButtonTask(context, hWPlatform->getChangeModeButton());
   changeModeButtonTask->init(BUTTON_TASK_PERIOD);
 
-  Task* potentiometerTask = new PotentiometerTask(context, hWPlatform.getPot(), degrees);
+  Task* potentiometerTask = new PotentiometerTask(context, hWPlatform->getPot(), degrees);
   potentiometerTask->init(POTENTIOMETER_TASK_PERIOD);
 
-  Task* lcdTask = new LCDTask(hWPlatform.getLcd(), context, degrees);
+  Task* lcdTask = new LCDTask(hWPlatform->getLcd(), context, degrees);
   lcdTask->init(LCD_TASK_PERIOD);
 
   Task* msgManagerTask = new MsgManagerTask(context, degrees);
   msgManagerTask->init(MSG_MANAGER_TASK_PERIOD);
 
-  Task* doorTask = new DoorTask(context, hWPlatform.getServo(), degrees);
+  Task* doorTask = new DoorTask(context, hWPlatform->getServo(), degrees);
   doorTask->init(DOOR_TASK_PERIOD);
 
   sched.addTask(changeModeButtonTask);

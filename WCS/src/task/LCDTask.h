@@ -16,6 +16,7 @@ class LCDTask: public Task{
         Context& context;
         int& gradi;
         State lastState;
+        int lastdegrees;
         void printString(String s);
 };
 #endif

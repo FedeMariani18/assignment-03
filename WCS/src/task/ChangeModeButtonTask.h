@@ -11,8 +11,8 @@ class ChangeModeButtonTask: public Task {
         void tick();
 
     private:
-        Button* button;
         Context& context;
+        Button* button;
 };
 
 #endif
