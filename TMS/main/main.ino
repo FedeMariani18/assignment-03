@@ -9,6 +9,7 @@ TaskHandle_t SonarTask;
 TaskHandle_t ComunicationTask;
 Led greenLed(GREEN_LED_PIN);
 Led redLed(RED_LED_PIN);
+Sonar sonar(SONAR_ECHO_PIN, SONAR_TRIG_PIN, SONAR_TIMEOUT);
 WiFiClient espClient;
 PubSubClient mqttClient(espClient);
 volatile bool isConnOk = false;
@@ -23,21 +24,21 @@ void setup() {
   xTaskCreatePinnedToCore(ComunicationTaskCode, "MQTT", 8192, NULL, 1, &ComunicationTask, 0);
   xTaskCreatePinnedToCore(LedTaskCode, "LED", 1024, NULL, 1, &LedTask, 1);
   randomSeed(analogRead(0));
-
 }
 
-void loop() {
-  // put your main code here, to run repeatedly:
-
-}
+void loop() {}
 
 void SonarTaskCode(void* parameter){
   Serial.print("SonarTask is running on core ");
   Serial.println(xPortGetCoreID());
 
-  for(;;){
+  const TickType_t period = SONAR_TASK_PERIOD / portTICK_PERIOD_MS;
+  TickType_t lastWakeTime = xTaskGetTickCount();
 
-  } 
+  for(;;){
+    waterLevel = sonar.getDistance();
+    vTaskDelayUntil(&lastWakeTime, period);
+  }
 }
 
 void ComunicationTaskCode(void* parameter){
@@ -49,34 +50,33 @@ void ComunicationTaskCode(void* parameter){
 
   enum ComunicationState {
     CONNECTED,
-    DISCONNECTED
+    UNCONNECTED
   };
 
-  ComunicationState state = DISCONNECTED;
+  ComunicationState state = UNCONNECTED;
   mqttClient.setServer(MQTT_SERVER, MQTT_PORT);
   String clientId = "esiot-2025-client-" + String(random(0xffff), HEX);
 
   for(;;) {
     switch (state) {
       case CONNECTED:
-        if (WiFi.status() == WL_CONNECTED && mqttClient.connected()) {
-          mqttClient.loop();
-          String msg = String(waterLevel);
-          mqttClient.publish(MQTT_TOPIC, msg.c_str());
-          isConnOk = true;
-        } else {
+        if (WiFi.status() != WL_CONNECTED || !mqttClient.connected()) {
           isConnOk = false;
-          state = DISCONNECTED;
+          state = UNCONNECTED;
+          break;
         }
+        isConnOk = true;
+        mqttClient.loop();
+        String msg = String(waterLevel);
+        mqttClient.publish(MQTT_TOPIC, msg.c_str());
         break;
-
-      case DISCONNECTED:
-        isConnOk = false;
+      case UNCONNECTED:
         if (WiFi.status() != WL_CONNECTED) {
           WiFi.begin(SSID, PASSWORD);
         } else {
           if (mqttClient.connect(clientId.c_str())) {
             state = CONNECTED;
+            isConnOk = true;
           }
         }
         break;
@@ -100,17 +100,17 @@ void LedTaskCode(void *pvParameters) {
   for(;;) {
     switch (state) {
       case CONNECTED:
-        greenLed.switchOn();
-        redLed.switchOff();
         if (!isConnOk) {
           state = UNCONNECTED;
+          greenLed.switchOff();
+          redLed.switchOn();
         }
         break;
       case UNCONNECTED:
-        greenLed.switchOff();
-        redLed.switchOn();
         if (isConnOk) {
           state = CONNECTED;
+          greenLed.switchOn();
+          redLed.switchOff();
         }
         break;
     }
