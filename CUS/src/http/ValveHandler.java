@@ -1,6 +1,8 @@
 package http;
 
 import com.sun.net.httpserver.*;
+
+import core.Common.State;
 import interfaces.ControlInterface;
 
 import java.io.InputStream;
@@ -34,7 +36,7 @@ public class ValveHandler implements HttpHandler {
             }
 
             // send an error if the mode is not manual becouse the DBS can change the valve value only in manual mode
-            if (!controller.getMode().equals("MANUAL")) {
+            if (controller.getMode() != State.MANUAL) {
                 exchange.sendResponseHeaders(403, -1);
                 return;
             }

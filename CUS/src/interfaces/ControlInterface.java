@@ -1,12 +1,13 @@
 package interfaces;
 
 import java.util.List;
+import core.Common.*;
 
 public interface ControlInterface {
 
-    String getMode();              // MANUAL / AUTOMATIC / UNCONNECTED
+    State getMode();              // MANUAL / AUTOMATIC / UNCONNECTED
 
-    void setMode(String mode);
+    void setMode(State mode);
 
     int getValveOpening();
 

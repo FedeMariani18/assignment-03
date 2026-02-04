@@ -6,21 +6,23 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import core.Common.State;
+
 public class SystemController implements ControlInterface {
 
-    private String mode = "AUTOMATIC";
+    private State mode = State.AUTOMATIC;
     private int valve = 0;
     private boolean connected = true;
 
     private Random rand = new Random();
 
     @Override
-    public synchronized String getMode() {
+    public synchronized State getMode() {
         return mode;
     }
 
     @Override
-    public synchronized void setMode(String mode) {
+    public synchronized void setMode(State mode) {
         this.mode = mode;
     }
 
@@ -31,7 +33,7 @@ public class SystemController implements ControlInterface {
 
     @Override
     public synchronized void setValveOpening(int value) {
-        if (mode.equals("MANUAL")) {
+        if (mode == State.MANUAL) {
             valve = value;
         }
     }
