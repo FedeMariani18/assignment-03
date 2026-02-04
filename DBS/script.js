@@ -47,7 +47,8 @@ async function fetchMeasurements() {
     return r.json();
 }
 
-/* === COMANDI VERSO IL CUS === */
+
+/*COMANDI VERSO IL CUS*/
 
 async function sendMode(mode) {
     await fetch(`${BASE_URL}/mode`, {
@@ -57,7 +58,9 @@ async function sendMode(mode) {
     });
 }
 
+
 async function sendValve(value) {
+    //send the percentage of the valve
     await fetch(`${BASE_URL}/valve`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -65,7 +68,7 @@ async function sendValve(value) {
     });
 }
 
-/* === EVENTI GUI === */
+/*  EVENTI GUI  */
 
 modeBtn.addEventListener("click", async () => {
     const newMode = currentMode === "MANUAL" ? "AUTOMATIC" : "MANUAL";
@@ -78,7 +81,7 @@ slider.addEventListener("input", async () => {
     await sendValve(value);
 });
 
-/* === AGGIORNAMENTO DASHBOARD === */
+/*  AGGIORNAMENTO DASHBOARD  */
 
 async function updateDashboard() {
     try {
