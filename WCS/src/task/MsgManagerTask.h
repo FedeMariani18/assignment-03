@@ -9,15 +9,19 @@
 class MsgManagerTask: public Task{
 
 public:
-    MsgManagerTask(Context& context);
+    MsgManagerTask(Context& context, int& gradi);
     void init(int period) override;
     void tick();
 
 private:
     void receive();
     void send();
-
+    State transformMsgToState(String msg, String degrees);
+    String transformStateToSring(State state);
     Context& context;
+    int& gradi;
+    int lastDegrees;
+    State lastState;
 };
 
 #endif

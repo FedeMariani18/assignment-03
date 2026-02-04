@@ -7,6 +7,9 @@
 
 #include "task/ChangeModeButtonTask.h"
 #include "task/PotentiometerTask.h"
+#include "task/LCDTask.h"
+#include "task/MsgManagerTask.h"
+#include "task/DoorTask.h"
 
 Scheduler sched;
 HWPlatform hWPlatform;
@@ -27,7 +30,23 @@ void setup() {
 
   Task* potentiometerTask = new PotentiometerTask(context, hWPlatform.getPot(), degrees);
   potentiometerTask->init(POTENTIOMETER_TASK_PERIOD);
+
+  Task* lcdTask = new LCDTask(hWPlatform.getLcd(), context, degrees);
+  lcdTask->init(LCD_TASK_PERIOD);
+
+  Task* msgManagerTask = new MsgManagerTask(context, degrees);
+  msgManagerTask->init(MSG_MANAGER_TASK_PERIOD);
+
+  Task* doorTask = new DoorTask(context, hWPlatform.getServo(), degrees);
+  doorTask->init(DOOR_TASK_PERIOD);
+
+  sched.addTask(changeModeButtonTask);
+  sched.addTask(potentiometerTask);
+  sched.addTask(lcdTask);
+  sched.addTask(msgManagerTask);
+  sched.addTask(doorTask);
 }
+
 
 void loop() {
   // put your main code here, to run repeatedly:
