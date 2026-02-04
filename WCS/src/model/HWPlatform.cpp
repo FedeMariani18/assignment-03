@@ -7,6 +7,7 @@ void wakeUp(){}
 
 HWPlatform::HWPlatform(){
   changeModeButton = new ButtonImpl(BTN_PIN);
+  pot = new Potentiometer(POT_PIN);
   servo = new ServoMotorImpl(SERVO_PIN);
 
   lcd = new LiquidCrystal_I2C(LCD_ADRR, LCD_COLS, LCD_ROWS);
@@ -20,6 +21,9 @@ Button* HWPlatform::getChangeModeButton(){
   return changeModeButton;
 }
 
+Potentiometer* HWPlatform::getPot(){
+  return pot;
+}
 
 ServoMotor* HWPlatform::getServo(){
   return servo;

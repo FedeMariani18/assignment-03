@@ -12,7 +12,7 @@ class ChangeModeButtonTask: public Task {
 
     private:
         Button* button;
-        Context context;
+        Context& context;
 };
 
 #endif

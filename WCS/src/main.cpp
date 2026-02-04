@@ -6,6 +6,7 @@
 #include "model/Context.h"
 
 #include "task/ChangeModeButtonTask.h"
+#include "task/PotentiometerTask.h"
 
 Scheduler sched;
 HWPlatform hWPlatform;
@@ -23,6 +24,9 @@ void setup() {
 
   Task* changeModeButtonTask = new ChangeModeButtonTask(context, hWPlatform.getChangeModeButton());
   changeModeButtonTask->init(BUTTON_TASK_PERIOD);
+
+  Task* potentiometerTask = new PotentiometerTask(context, hWPlatform.getPot(), degrees);
+  potentiometerTask->init(POTENTIOMETER_TASK_PERIOD);
 }
 
 void loop() {
