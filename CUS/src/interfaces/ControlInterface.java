@@ -5,9 +5,9 @@ import core.Common.*;
 
 public interface ControlInterface {
 
-    State getMode();              // MANUAL / AUTOMATIC / UNCONNECTED
+    State getState();              // MANUAL / AUTOMATIC / UNCONNECTED
 
-    void setMode(State mode);
+    void setState(State mode);
 
     int getValveOpening();
 

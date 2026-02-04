@@ -44,7 +44,7 @@ public class ModeHandler implements HttpHandler {
             String mode = body.replaceAll("[^A-Za-z]", "").toUpperCase();
             mode = mode.replaceAll("MODE", "").toUpperCase();
             if (mode.equals("MANUAL") || mode.equals("AUTOMATIC")) {
-                controller.setMode(Common.stringToState(mode));
+                controller.setState(Common.stringToState(mode));
                 exchange.sendResponseHeaders(200, -1);
             } else {
                 exchange.sendResponseHeaders(400, -1); // bad request

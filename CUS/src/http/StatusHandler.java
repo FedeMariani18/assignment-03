@@ -33,7 +33,7 @@ public class StatusHandler implements HttpHandler {
             //prepare the json
             String json =
                     "{"
-                    + "\"mode\":\"" + controller.getMode() + "\","
+                    + "\"mode\":\"" + controller.getState() + "\","
                     + "\"valve\":" + controller.getValveOpening() + ","
                     + "\"connected\":" + controller.isConnected()
                     + "}";

@@ -36,7 +36,7 @@ public class ValveHandler implements HttpHandler {
             }
 
             // send an error if the mode is not manual becouse the DBS can change the valve value only in manual mode
-            if (controller.getMode() != State.MANUAL) {
+            if (controller.getState() != State.MANUAL) {
                 exchange.sendResponseHeaders(403, -1);
                 return;
             }

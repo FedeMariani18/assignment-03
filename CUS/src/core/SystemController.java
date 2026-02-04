@@ -17,12 +17,12 @@ public class SystemController implements ControlInterface {
     private Random rand = new Random();
 
     @Override
-    public synchronized State getMode() {
+    public synchronized State getState() {
         return mode;
     }
 
     @Override
-    public synchronized void setMode(State mode) {
+    public synchronized void setState(State mode) {
         this.mode = mode;
     }
 
