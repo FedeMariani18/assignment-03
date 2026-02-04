@@ -4,7 +4,6 @@
     ],
     "java.project.outputPath": "bin",
     "java.project.referencedLibraries": [
-        "lib\\org.eclipse.paho.client.mqttv3-1.2.5.jar",
-        "c:\\Users\\Win10\\OneDrive - Alma Mater Studiorum Università di Bologna\\Embedded System\\assignment-03\\CUS\\lib\\org.eclipse.paho.client.mqttv3-1.2.5.jar"
+        "lib/**/*.jar"
     ]
 }
