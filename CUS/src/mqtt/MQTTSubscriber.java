@@ -21,7 +21,6 @@ public class MQTTSubscriber {
     }
 
     public void start() throws MqttException {
-        controller.setLastMessageTimeFromTMS(System.currentTimeMillis());
         client = new MqttClient(broker, clientId);
 
         client.setCallback(new MqttCallback() {
@@ -33,8 +32,6 @@ public class MQTTSubscriber {
 
             @Override
             public void messageArrived(String topic, MqttMessage message) {
-                controller.setLastMessageTimeFromTMS(System.currentTimeMillis());
-
                 String payload = new String(message.getPayload());
                 float level = Float.parseFloat(payload);
                 controller.setWaterLevel(level);

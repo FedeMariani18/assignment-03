@@ -19,9 +19,8 @@ public interface ControlInterface {
 
     void setWaterLevel(float waterLevel);
 
-    void setLastMessageTimeFromTMS(long time);
-
     float getWaterLevel();
 
-    long getLastMessageTimeFromTMS();
+    void checkT2();
+
 }

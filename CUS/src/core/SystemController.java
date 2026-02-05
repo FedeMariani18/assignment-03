@@ -9,11 +9,14 @@ import java.util.List;
 import java.util.Queue;
 import java.util.Random;
 
+import core.Common.AutomaticState;
 import core.Common.State;
 
 public class SystemController implements ControlInterface {
 
     private State mode = State.AUTOMATIC;
+    private AutomaticState automaticState = AutomaticState.WAIT;
+    private long sinceL1;
     private int valve = 0;
     private boolean connected = true;
     private float waterLevel;
@@ -29,7 +32,12 @@ public class SystemController implements ControlInterface {
 
     @Override
     public synchronized void setState(State mode) {
-        this.mode = mode;
+        if (this.mode != mode) {
+            if (mode == State.AUTOMATIC) {
+                this.automaticState = AutomaticState.WAIT;
+            }
+            this.mode = mode;
+        }
     }
 
     @Override
@@ -57,24 +65,65 @@ public class SystemController implements ControlInterface {
     }
 
     @Override
-    public void setWaterLevel(float waterLevel) {
+    public synchronized void setWaterLevel(float waterLevel) {
+        if (mode == State.UNCONNECTED) {
+            this.mode = State.AUTOMATIC;
+            this.automaticState = AutomaticState.WAIT;
+        }
+
         this.waterLevel = waterLevel;
         this.measuramentsValues.removeFirst();
         this.measuramentsValues.addLast((int)waterLevel);
+
+        long now = System.currentTimeMillis();
+        this.lastMessageTimeFromTMS = now;
+
+        if (mode == State.MANUAL) {
+            return;
+        }
+
+        switch (automaticState) {
+            case AutomaticState.WAIT:
+                if (this.waterLevel > Common.L1) {
+                    automaticState = AutomaticState.L1_SURPASSED;
+                    sinceL1 = now;
+                }
+                break;
+            case AutomaticState.L1_SURPASSED:
+                if (this.waterLevel > Common.L2) {
+                    automaticState = AutomaticState.L2_SURPASSED;
+                    this.valve = 100;
+                } else if (this.waterLevel < Common.L1) {
+                    automaticState = AutomaticState.WAIT;
+                    this.valve = 0;
+                }  else if (now - sinceL1 > Common.T1) {
+                    this.valve = 50;
+                }
+                break;
+            case AutomaticState.L2_SURPASSED:
+                if (this.waterLevel < Common.L2) {
+                    automaticState = AutomaticState.L1_SURPASSED;
+                    this.valve = 50;
+                    sinceL1 = now;
+                }
+                break;
+        }
     }
 
     @Override
-    public void setLastMessageTimeFromTMS(long time) {
-        this.lastMessageTimeFromTMS = time;
-    }
-
-    @Override
-    public float getWaterLevel() {
+    public synchronized float getWaterLevel() {
         return this.waterLevel;
     }
 
     @Override
-    public long getLastMessageTimeFromTMS() {
-        return this.lastMessageTimeFromTMS;
+    public synchronized void checkT2() {
+        long now = System.currentTimeMillis();
+        if (this.mode == State.UNCONNECTED) {
+            return;
+        }
+        if (now - this.lastMessageTimeFromTMS > Common.T2) {
+            this.mode = State.UNCONNECTED;
+        }
     }
+
 }

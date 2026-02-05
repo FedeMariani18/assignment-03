@@ -1,10 +1,22 @@
 package core;
 
 public class Common {
+
+    public static final int L1 = 10;
+    public static final int L2 = 20;
+    public static final int T1 = 500;
+    public static final int T2 = 10000;
+
     public enum State{
         AUTOMATIC,
         MANUAL,
         UNCONNECTED
+    }
+
+    public enum AutomaticState {
+        WAIT,
+        L1_SURPASSED,
+        L2_SURPASSED
     }
 
     public static String stateToString(State s){
