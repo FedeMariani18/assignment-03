@@ -24,22 +24,22 @@ public class HttpServerModule {
         //ex: a request comming for /api/status create and execute StatusHandler
         server.createContext(
                 "/api/status",
-                new StatusHandler(controller)
+                new StatusHandler(this.controller)
         );
 
         server.createContext(
                 "/api/measurements",
-                new MeasurementsHandler(controller)
+                new MeasurementsHandler(this.controller)
         );
 
         server.createContext(
                 "/api/mode",
-                new ModeHandler(controller)
+                new ModeHandler(this.controller)
         );
 
         server.createContext(
                 "/api/valve",
-                new ValveHandler(controller)
+                new ValveHandler(this.controller)
         );
 
         server.setExecutor(null);   //se the default thread pool, Java can manage more client and more request 
