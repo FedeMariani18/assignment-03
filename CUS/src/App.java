@@ -18,7 +18,7 @@ public class App {
 
         String portName = "COM3";
         SerialController serial = new SerialController(core, portName);
-        serial.loop();
+        serial.start();
 
         ScheduledExecutorService scheduler =
         Executors.newSingleThreadScheduledExecutor();

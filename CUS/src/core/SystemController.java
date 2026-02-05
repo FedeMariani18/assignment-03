@@ -2,12 +2,9 @@ package core;
 
 import interfaces.ControlInterface;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
-import java.util.Random;
 
 import core.Common.AutomaticState;
 import core.Common.State;
@@ -22,8 +19,6 @@ public class SystemController implements ControlInterface {
     private float waterLevel;
     private long lastMessageTimeFromTMS;
     private List<Integer> measuramentsValues = new LinkedList<>(Collections.nCopies(100, 0)); //create a list of 100 elements, all 0
-
-    private Random rand = new Random();
 
     @Override
     public synchronized State getState() {
