@@ -14,7 +14,7 @@ public class App {
 
         String portName = "COM3";
         SerialController serial = new SerialController(core, portName);
-        serial.loop();
+        serial.start();
 
         Thread.currentThread().join();
     }
