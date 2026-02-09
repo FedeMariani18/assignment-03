@@ -16,8 +16,8 @@
 #define MQTT_SERVER "broker.mqtt-dashboard.com"
 #define MQTT_PORT 1883
 #define MQTT_TOPIC "tms/waterLevel"
-#define SSID ""
-#define PASSWORD ""
+#define WIFI_SSID "A23 di Alan"
+#define WIFI_PASSWORD "nqoz6563"
 
-
+#define TANK_HEIGHT 2
 #endif

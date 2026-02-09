@@ -4,7 +4,7 @@
 LCDTask::LCDTask(LiquidCrystal_I2C* lcd, Context& context, int& gradi):
     lcd(lcd), context(context), gradi(gradi){
         lastdegrees = 0;
-        lastState = State::UNCONNECTED;
+        lastState = State::AUTOMATIC;
 }
 
 void LCDTask::tick(){

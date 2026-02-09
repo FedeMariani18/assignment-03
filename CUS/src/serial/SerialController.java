@@ -36,8 +36,8 @@ public class SerialController {
 
     private void updateFromMsg() throws InterruptedException {
         if(commChannel.isMsgAvailable()){
+            
             String msg = commChannel.receiveMsg();
-
             String[] parts = msg.split(";");
             String stateToken = parts[0];
             String valveToken = parts.length > 1 ? parts[1] : "";
@@ -60,6 +60,8 @@ public class SerialController {
             msg = Common.stateToString(controller.getState()) + ";";
         } else if (controller.getState() == Common.State.MANUAL){
             msg = Common.stateToString(controller.getState()) + ";" + controller.getValveOpening();
+        } else if (controller.getState() == Common.State.UNCONNECTED){
+            msg = Common.stateToString(controller.getState()) + ";";
         }
 
         if(!msg.isEmpty()){

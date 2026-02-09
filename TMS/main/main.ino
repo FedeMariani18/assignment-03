@@ -14,6 +14,8 @@ WiFiClient espClient;
 PubSubClient mqttClient(espClient);
 volatile bool isConnOk = false;
 volatile float waterLevel;
+bool wifiConnecting = false;
+
 
 void setup() {
   Serial.begin(115200);
@@ -36,7 +38,7 @@ void SonarTaskCode(void* parameter){
   TickType_t lastWakeTime = xTaskGetTickCount();
 
   for(;;){
-    waterLevel = sonar.getDistance();
+    waterLevel = TANK_HEIGHT- sonar.getDistance();
     vTaskDelayUntil(&lastWakeTime, period);
   }
 }
@@ -58,6 +60,7 @@ void ComunicationTaskCode(void* parameter){
   String clientId = "esiot-2025-client-" + String(random(0xffff), HEX);
 
   for(;;) {
+    String msg;
     switch (state) {
       case CONNECTED:
         if (WiFi.status() != WL_CONNECTED || !mqttClient.connected()) {
@@ -67,16 +70,22 @@ void ComunicationTaskCode(void* parameter){
         }
         isConnOk = true;
         mqttClient.loop();
-        String msg = String(waterLevel);
+        msg = String(waterLevel);
         mqttClient.publish(MQTT_TOPIC, msg.c_str());
         break;
       case UNCONNECTED:
         if (WiFi.status() != WL_CONNECTED) {
-          WiFi.begin(SSID, PASSWORD);
+          if (!wifiConnecting) {
+            WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
+            wifiConnecting = true;
+            Serial.println("WiFi connecting...");
+          }
         } else {
+          wifiConnecting = false;
           if (mqttClient.connect(clientId.c_str())) {
             state = CONNECTED;
             isConnOk = true;
+            Serial.println("MQTT connected");
           }
         }
         break;

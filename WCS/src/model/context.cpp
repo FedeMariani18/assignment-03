@@ -2,7 +2,7 @@
 #include "kernel/config.h"
 
 Context::Context(){
-    this->state = State::AUTOMATIC;
+    this->state = State::UNCONNECTED;
 }
 
 void Context::setState(State s){

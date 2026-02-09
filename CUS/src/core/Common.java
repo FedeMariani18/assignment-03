@@ -2,10 +2,10 @@ package core;
 
 public class Common {
 
-    public static final int L1 = 10;
-    public static final int L2 = 20;
-    public static final int T1 = 500;
-    public static final int T2 = 10000;
+    public static final int L1 = 1;
+    public static final double L2 = 1.8;
+    public static final int T1 = 3000;
+    public static final int T2 = 5000;
 
     public enum State{
         AUTOMATIC,

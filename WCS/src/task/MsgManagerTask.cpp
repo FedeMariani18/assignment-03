@@ -17,9 +17,12 @@ void MsgManagerTask::tick(){
 }
 
 void MsgManagerTask::receive(){
+    Serial.println("Ricevo");
     if(MsgService.isMsgAvailable()){
         String msg = MsgService.receiveMsg()->getContent();
+        Serial.println("Ricevo");
         if (msg.length() > 0) {
+            Serial.println(msg);
             int sep = msg.indexOf(';');
             String stateToken = msg.substring(0, sep);
             String degreesToken = msg.substring(sep + 1); 
@@ -31,7 +34,6 @@ void MsgManagerTask::receive(){
 
 void MsgManagerTask::send() {
     String msg = "";
-
     bool stateChanged = (lastState != context.getState());
     bool degreesChanged = (lastDegrees != gradi);
 
