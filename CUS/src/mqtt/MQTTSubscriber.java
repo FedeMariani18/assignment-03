@@ -15,21 +15,25 @@ public class MQTTSubscriber {
 
     public MQTTSubscriber(ControlInterface controller) {
         this.controller = controller;
-        this.broker = "tcp://broker.mqtt-dashboard.com";
-        this.clientId = "esiot-2025-" + System.currentTimeMillis();
-        this.topic = "tms/waterLevel";
+        this.broker = "tcp://broker.mqtt-dashboard.com"; //broker pubblico a cui collegarsi
+        this.clientId = "esiot-2025-" + System.currentTimeMillis(); //client id, deve essere unico nella connessione
+        this.topic = "tms/waterLevel"; //topic su cui, all'interno del broker, verranno ricevuti i messaggi
     }
 
     public void start() throws MqttException {
+        //client mqtt, setto il broker e l'id
         client = new MqttClient(broker, clientId);
 
+        //callback asincrona per la gestione degli eventi mqtt
         client.setCallback(new MqttCallback() {
 
+            //evento di connessione persa
             @Override
             public void connectionLost(Throwable cause) {
                 controller.setState(State.UNCONNECTED);
             }
 
+            //evento di messaggio ricevuto
             @Override
             public void messageArrived(String topic, MqttMessage message) {
                 String payload = new String(message.getPayload());
@@ -37,11 +41,13 @@ public class MQTTSubscriber {
                 controller.setWaterLevel(level);
             }
 
+            //evento di avvenuta consegna, non ci serve visto che siamo solo dei subscriber
             @Override
             public void deliveryComplete(IMqttDeliveryToken token) {}
         });
 
         client.connect();
+        //sottoscrizione al topic con qos 1 (at least once)
         client.subscribe(topic, 1);
     }
 }
