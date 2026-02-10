@@ -40,12 +40,12 @@ public class SerialController {
             String msg = commChannel.receiveMsg();
             String[] parts = msg.split(";");
 
-            if (parts.length < 2) {
+            /*if (parts.length < 2) {
                 System.out.println("Messaggio seriale non valido: " + msg);
                 return;
-            }
+            }*/
 
-            String stateToken = parts[0];
+            /*String stateToken = parts[0];
             String degreesToken = parts[1];
 
             Common.State s = Common.stringToState(stateToken);
@@ -58,7 +58,7 @@ public class SerialController {
                 controller.setValveOpening(degrees);
             } catch (NumberFormatException e) {
                 System.out.println("Gradi non validi nel messaggio: " + msg);
-            }
+            }*/
 
         }
     }

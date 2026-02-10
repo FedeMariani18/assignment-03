@@ -11,7 +11,7 @@ import core.Common.State;
 
 public class SystemController implements ControlInterface {
 
-    private State mode = State.AUTOMATIC;
+    private State mode = State.UNCONNECTED;
     private AutomaticState automaticState = AutomaticState.WAIT;
     private long sinceL1;
     private int valve = 0;

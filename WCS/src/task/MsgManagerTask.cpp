@@ -19,8 +19,10 @@ void MsgManagerTask::tick(){
 }
 
 void MsgManagerTask::receive(){
+    Serial.println("Ricevo");
     if(MsgService.isMsgAvailable()){
         String msg = MsgService.receiveMsg()->getContent();
+        Serial.println(msg);
         if (msg.length() > 0) {
             Serial.println(msg);
             int sep = msg.indexOf(';');

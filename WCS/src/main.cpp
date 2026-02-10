@@ -20,7 +20,6 @@ int degrees;
 int myFunction(int, int);
 
 void setup() {
-  Serial.begin(115200);
   // put your setup code here, to run once:
   sched.init(PERIOD);
 

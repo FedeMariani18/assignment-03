@@ -21,13 +21,12 @@ Msg* MsgServiceClass::receiveMsg(){
 void MsgServiceClass::init(){
     Serial.begin(115200);
     content.reserve(256);
-    currentMsg = new Msg("");
     resetMsg();
 }
 
 void MsgServiceClass::resetMsg(){
-    if(currentMsg == NULL){
-        currentMsg->setContent("");
+    if(currentMsg != NULL){
+        currentMsg.setContent("");
     }
     msgAvailable = false;
     content = "";
@@ -42,7 +41,7 @@ void serialEvent() {
     while (Serial.available()) {
         char ch = (char) Serial.read();
         if (ch == '\n'){
-            MsgService.currentMsg = new Msg(content);
+            MsgService.currentMsg.setContent(content);
             MsgService.msgAvailable = true;      
         } else {
             content += ch;      
@@ -50,16 +49,11 @@ void serialEvent() {
     }
 }
 
-bool MsgServiceClass::isMsgAvailable(Pattern& pattern){
+/*bool MsgServiceClass::isMsgAvailable(Pattern& pattern){
     return (msgAvailable && pattern.match(*currentMsg));
-}
+}*/
 
 Msg* MsgServiceClass::receiveMsg(Pattern& pattern){
-    if (msgAvailable && pattern.match(*currentMsg)){
-        Msg* msg = currentMsg;
-        resetMsg();
-        return msg;  
-    } else {
-        return NULL; 
-    }
+    msgAvailable = false;
+    return &currentMsg;
 }
