@@ -28,7 +28,7 @@ public:
 class MsgServiceClass {
     
 public: 
-    Msg currentMsg;
+    Msg* currentMsg;
     bool msgAvailable;
 
     void init();

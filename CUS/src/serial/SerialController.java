@@ -25,7 +25,7 @@ public class SerialController {
     public void loop() throws InterruptedException {
         while(true){
             processIO();
-            Thread.sleep(10);
+            Thread.sleep(1000);
         }
     }
 
@@ -36,16 +36,16 @@ public class SerialController {
 
     private void updateFromMsg() throws InterruptedException {
         if(commChannel.isMsgAvailable()){
-            
             String msg = commChannel.receiveMsg();
+            System.out.println(msg);
             String[] parts = msg.split(";");
 
-            /*if (parts.length < 2) {
+            if (parts.length < 2) {
                 System.out.println("Messaggio seriale non valido: " + msg);
                 return;
-            }*/
+            }
 
-            /*String stateToken = parts[0];
+            String stateToken = parts[0];
             String degreesToken = parts[1];
 
             Common.State s = Common.stringToState(stateToken);
@@ -58,8 +58,7 @@ public class SerialController {
                 controller.setValveOpening(degrees);
             } catch (NumberFormatException e) {
                 System.out.println("Gradi non validi nel messaggio: " + msg);
-            }*/
-
+            }
         }
     }
 

@@ -2,11 +2,16 @@
 
 PotentiometerTask::PotentiometerTask(Context& context, Potentiometer* pot, int& degrees):
     context(context), pot(pot), gradi(degrees){
+        lastDegrees = 0;
 }
 
 void PotentiometerTask::tick(){
     if(context.getState() == State::MANUAL){
         pot->sync();
-        gradi = pot->getValue() * 90;
+        int currentReadDegrees = (int)(pot->getValue() * 90);
+        if(abs(currentReadDegrees - lastDegrees) >= 2) {
+            lastDegrees = currentReadDegrees;
+            gradi = lastDegrees;
+        }
     }
 }

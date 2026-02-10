@@ -8,27 +8,24 @@ String content;
 MsgServiceClass MsgService;
 
 bool MsgServiceClass::isMsgAvailable(){
+    serialEvent();
     return msgAvailable;
 }
 
 Msg* MsgServiceClass::receiveMsg(){
-    if (!msgAvailable) {
-        return NULL;
-    }
     msgAvailable = false;
-    return &currentMsg;
+    return currentMsg;
 }
 
 void MsgServiceClass::init(){
     Serial.begin(115200);
     content.reserve(256);
+    currentMsg = new Msg("");
     resetMsg();
 }
 
 void MsgServiceClass::resetMsg(){
-    currentMsg.setContent("");
     msgAvailable = false;
-    content = "";
 }
 
 void MsgServiceClass::sendMsg(const String& msg){
@@ -36,15 +33,28 @@ void MsgServiceClass::sendMsg(const String& msg){
 }
 
 void serialEvent() {
-    /* reading the content */
     while (Serial.available()) {
         char ch = (char) Serial.read();
         if (ch == '\n'){
-            MsgService.currentMsg.setContent(content);
-            MsgService.msgAvailable = true;  
-            content = "";    
-        } else {
+            MsgService.currentMsg = new Msg(content); // Usa l'oggetto esistente
+            MsgService.msgAvailable = true;      
+            content = ""; // SVUOTA SUBITO IL BUFFER PER IL PROSSIMO MESSAGGIO
+        } else if (ch != '\r'){ // Ignora il ritorno a capo di Windows
             content += ch;      
         }   
+    }
+}
+
+bool MsgServiceClass::isMsgAvailable(Pattern& pattern){
+    return (msgAvailable && pattern.match(*currentMsg));
+}
+
+Msg* MsgServiceClass::receiveMsg(Pattern& pattern){
+    if (msgAvailable && pattern.match(*currentMsg)){
+        Msg* msg = currentMsg;
+        resetMsg();
+        return msg;  
+    } else {
+        return NULL; 
     }
 }

@@ -120,7 +120,6 @@ void LedTaskCode(void *pvParameters) {
 
   LedState state = UNCONNECTED;
   redLed.switchOn();
-
   for(;;) {
     switch (state) {
       case CONNECTED:

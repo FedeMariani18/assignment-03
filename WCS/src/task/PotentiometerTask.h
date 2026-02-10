@@ -15,6 +15,7 @@ class PotentiometerTask: public Task {
         Potentiometer* pot;
 
         int& gradi;
+        int lastDegrees;
 };
 
 #endif

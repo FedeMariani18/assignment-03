@@ -44,8 +44,8 @@ void setup() {
   sched.addTask(changeModeButtonTask);
   sched.addTask(potentiometerTask);
   sched.addTask(lcdTask);
-  sched.addTask(msgManagerTask);
   sched.addTask(doorTask);
+  sched.addTask(msgManagerTask);
 }
 
 

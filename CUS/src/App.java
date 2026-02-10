@@ -1,4 +1,4 @@
-                                                                         import java.util.concurrent.Executors;
+import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
@@ -16,12 +16,11 @@ public class App {
         MQTTSubscriber mqtt = new MQTTSubscriber(core);
         mqtt.start();
 
-        String portName = "COM3";
+        String portName = "COM4";
         SerialController serial = new SerialController(core, portName);
         serial.start();
 
-        ScheduledExecutorService scheduler =
-        Executors.newSingleThreadScheduledExecutor();
+        ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
 
         //visto che il cus è event-driven non ha un flusso di controllo, quindi per rilevare non un evento ma 
         // la sua "assenza" è necessario un modo per richiamare periodicamente il check:

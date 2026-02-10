@@ -4,8 +4,7 @@
 MsgManagerTask::MsgManagerTask(Context& context, int& gradi):
     context(context), gradi(gradi){
     lastState = State::UNCONNECTED;
-    lastDegrees = -1;
-
+    lastDegrees = 0;
 }
 
 void MsgManagerTask::init(int period){
@@ -14,36 +13,39 @@ void MsgManagerTask::init(int period){
 }
 
 void MsgManagerTask::tick(){
-    receive();
     send();
+    receive();
 }
 
 void MsgManagerTask::receive(){
-    Serial.println("Ricevo");
     if(MsgService.isMsgAvailable()){
         Msg* m = MsgService.receiveMsg();
         if (m == NULL) return;
 
         String msg = m->getContent();
-        Serial.println(msg);
 
-        int sep = msg.indexOf(';');
+        if(msg.length() > 0){
+            int sep = msg.indexOf(';');
 
-        if (sep == -1) {
-            Serial.println("Messaggio non valido: " + msg);
-            return;
+            if (sep == -1) {
+                Serial.println("Messaggio non valido: " + msg);
+                return;
+            }
+
+
+            String stateToken = msg.substring(0, sep);
+            String degreesToken = msg.substring(sep + 1);
+
+            State newState = transformMsgToState(stateToken);
+            context.setState(newState);
+
+            int val = degreesToken.toInt();
+            if (val >= 0){
+                gradi = val;
+            } 
         }
-
-
-        String stateToken = msg.substring(0, sep);
-        String degreesToken = msg.substring(sep + 1);
-
-        State newState = transformMsgToState(stateToken);
-        context.setState(newState);
-
-        int val = degreesToken.toInt();
-        if (val >= 0) gradi = val;
         
+        delete m;
     }
 }
 
