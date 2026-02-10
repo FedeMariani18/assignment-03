@@ -16,7 +16,7 @@ public class App {
         MQTTSubscriber mqtt = new MQTTSubscriber(core);
         mqtt.start();
 
-        String portName = "COM4";
+        String portName = "COM3";
         SerialController serial = new SerialController(core, portName);
         serial.start();
 

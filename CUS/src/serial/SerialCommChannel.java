@@ -39,6 +39,11 @@ public class SerialCommChannel implements CommChannel, SerialPortEventListener {
 	@Override
 	public void sendMsg(String msg) {
 		try {
+			if (!serialPort.isOpened()) {
+				System.out.println("Serial port closed, cannot send");
+				return;
+			}
+
 			synchronized (serialPort) {
 				serialPort.writeString(msg + "\n");
 			}
@@ -94,5 +99,9 @@ public class SerialCommChannel implements CommChannel, SerialPortEventListener {
                 System.out.println("Error in receiving string from COM-port: " + ex);
             }
         }
+	}
+
+	public boolean isOpen() {
+		return serialPort != null && serialPort.isOpened();
 	}
 }

@@ -16,7 +16,7 @@ public:
 private:
     void receive();
     void send();
-    State transformMsgToState(String msg, String degrees);
+    State transformMsgToState(String msg);
     String transformStateToSring(State state);
     Context& context;
     int& gradi;

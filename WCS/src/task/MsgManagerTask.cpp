@@ -3,6 +3,8 @@
 
 MsgManagerTask::MsgManagerTask(Context& context, int& gradi):
     context(context), gradi(gradi){
+    lastState = State::UNCONNECTED;
+    lastDegrees = -1;
 
 }
 
@@ -17,16 +19,22 @@ void MsgManagerTask::tick(){
 }
 
 void MsgManagerTask::receive(){
-    Serial.println("Ricevo");
     if(MsgService.isMsgAvailable()){
         String msg = MsgService.receiveMsg()->getContent();
-        Serial.println("Ricevo");
         if (msg.length() > 0) {
             Serial.println(msg);
             int sep = msg.indexOf(';');
+
+            if (sep == -1) {
+                Serial.println("Messaggio non valido: " + msg);
+                return;
+            }
+
+
             String stateToken = msg.substring(0, sep);
             String degreesToken = msg.substring(sep + 1); 
-            State newState = transformMsgToState(stateToken, degreesToken);
+            State newState = transformMsgToState(stateToken);
+            gradi = degreesToken.toInt();
             context.setState(newState);
         }
     }
@@ -37,15 +45,10 @@ void MsgManagerTask::send() {
     bool stateChanged = (lastState != context.getState());
     bool degreesChanged = (lastDegrees != gradi);
 
-    if (stateChanged || (context.getState() == State::MANUAL && degreesChanged)) {
+    if (stateChanged || degreesChanged) {
 
         // Stato sempre presente
-        msg += transformStateToSring(context.getState()) + ";";
-
-        // Gradi solo in MANUAL
-        if (context.getState() == State::MANUAL) {
-            msg += (String)gradi;
-        }
+        msg += transformStateToSring(context.getState()) + ";" + String(gradi);
 
         // Aggiorno i valori "last"
         lastState = context.getState();
@@ -57,12 +60,10 @@ void MsgManagerTask::send() {
     }
 }
 
-State MsgManagerTask::transformMsgToState(String msg, String degrees){;
-
+State MsgManagerTask::transformMsgToState(String msg){
     if (msg.equals("MANUAL")) {
         return State::MANUAL;
     } else if (msg.equals("AUTOMATIC")) {
-        gradi = degrees.toInt();
         return State::AUTOMATIC;
     } else if (msg.equals("UNCONNECTED")) {
         return State::UNCONNECTED;
@@ -85,4 +86,6 @@ String MsgManagerTask::transformStateToSring(State state){
             return "UNCONNECTED";
             break;
     }
+
+    return "UNCONNECTED";
 }

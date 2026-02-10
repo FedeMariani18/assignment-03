@@ -39,32 +39,36 @@ public class SerialController {
             
             String msg = commChannel.receiveMsg();
             String[] parts = msg.split(";");
+
+            if (parts.length < 2) {
+                System.out.println("Messaggio seriale non valido: " + msg);
+                return;
+            }
+
             String stateToken = parts[0];
-            String valveToken = parts.length > 1 ? parts[1] : "";
+            String degreesToken = parts[1];
 
             Common.State s = Common.stringToState(stateToken);
             if(s != null) {
                 controller.setState(s);
             }
 
-            if(!valveToken.isEmpty()){
-                int degrees = Integer.parseInt(valveToken);
+            try {
+                int degrees = Integer.parseInt(degreesToken);
                 controller.setValveOpening(degrees);
+            } catch (NumberFormatException e) {
+                System.out.println("Gradi non validi nel messaggio: " + msg);
             }
+
         }
     }
 
     private void sendMsg() {
-        String msg = "";
-        if(controller.getState() == Common.State.AUTOMATIC){
-            msg = Common.stateToString(controller.getState()) + ";";
-        } else if (controller.getState() == Common.State.MANUAL){
-            msg = Common.stateToString(controller.getState()) + ";" + controller.getValveOpening();
-        } else if (controller.getState() == Common.State.UNCONNECTED){
-            msg = Common.stateToString(controller.getState()) + ";";
-        }
+        String msg = Common.stateToString(controller.getState())
+                    + ";"
+                    + controller.getValveOpening();
 
-        if(!msg.isEmpty()){
+        if(!msg.isEmpty() && commChannel.isOpen()){
             commChannel.sendMsg(msg);
         }
     }
