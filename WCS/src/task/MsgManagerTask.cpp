@@ -21,24 +21,29 @@ void MsgManagerTask::tick(){
 void MsgManagerTask::receive(){
     Serial.println("Ricevo");
     if(MsgService.isMsgAvailable()){
-        String msg = MsgService.receiveMsg()->getContent();
+        Msg* m = MsgService.receiveMsg();
+        if (m == NULL) return;
+
+        String msg = m->getContent();
         Serial.println(msg);
-        if (msg.length() > 0) {
-            Serial.println(msg);
-            int sep = msg.indexOf(';');
 
-            if (sep == -1) {
-                Serial.println("Messaggio non valido: " + msg);
-                return;
-            }
+        int sep = msg.indexOf(';');
 
-
-            String stateToken = msg.substring(0, sep);
-            String degreesToken = msg.substring(sep + 1); 
-            State newState = transformMsgToState(stateToken);
-            gradi = degreesToken.toInt();
-            context.setState(newState);
+        if (sep == -1) {
+            Serial.println("Messaggio non valido: " + msg);
+            return;
         }
+
+
+        String stateToken = msg.substring(0, sep);
+        String degreesToken = msg.substring(sep + 1);
+
+        State newState = transformMsgToState(stateToken);
+        context.setState(newState);
+
+        int val = degreesToken.toInt();
+        if (val >= 0) gradi = val;
+        
     }
 }
 
