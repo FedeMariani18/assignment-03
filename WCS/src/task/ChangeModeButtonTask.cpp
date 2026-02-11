@@ -9,10 +9,10 @@ ChangeModeButtonTask::ChangeModeButtonTask(Context& context, Button* button):
 void ChangeModeButtonTask::tick() {
     button->update();
     if(button->wasPressed()){
-        if(this->context.getState() == State::AUTOMATIC){
-            this->context.setState(State::MANUAL);
-        } else if(this->context.getState() == State::MANUAL){
-            this->context.setState(State::AUTOMATIC);
+        if(context.getState() == State::AUTOMATIC){
+            context.setState(State::MANUAL);
+        } else if(context.getState() == State::MANUAL){
+            context.setState(State::AUTOMATIC);
         } 
     }
 }

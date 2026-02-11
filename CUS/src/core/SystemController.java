@@ -18,7 +18,7 @@ public class SystemController implements ControlInterface {
     private boolean connected = true;
     private float waterLevel;
     private long lastMessageTimeFromTMS;
-    private List<Integer> measuramentsValues = new LinkedList<>(Collections.nCopies(100, 0)); //create a list of 100 elements, all 0
+    private List<Float> measuramentsValues = new LinkedList<>(Collections.nCopies(100, 0f)); //create a list of 100 elements, all 0
 
     @Override
     public synchronized State getState() {
@@ -41,9 +41,9 @@ public class SystemController implements ControlInterface {
     }
 
     @Override
-    public synchronized void setValveOpening(int value) {
+    public synchronized void setValveOpening(int percentage) {
         if (mode == State.MANUAL) {
-            valve = value;
+            valve = percentage;
         }
     }
 
@@ -53,9 +53,9 @@ public class SystemController implements ControlInterface {
     }
 
     @Override
-    public synchronized List<Integer> getMeasurements(int n) {
+    public synchronized List<Float> getMeasurements(int n) {
         int size = measuramentsValues.size();
-        List<Integer> lastN = measuramentsValues.subList(Math.max(0, size - n), size);
+        List<Float> lastN = measuramentsValues.subList(Math.max(0, size - n), size);
         return lastN;
     }
 
@@ -68,7 +68,7 @@ public class SystemController implements ControlInterface {
 
         this.waterLevel = waterLevel;
         this.measuramentsValues.removeFirst();
-        this.measuramentsValues.addLast((int)waterLevel);
+        this.measuramentsValues.addLast((Float)waterLevel);
 
         long now = System.currentTimeMillis();
         this.lastMessageTimeFromTMS = now;
@@ -87,22 +87,22 @@ public class SystemController implements ControlInterface {
             case AutomaticState.L1_SURPASSED:
                 if (this.waterLevel > Common.L2) {
                     automaticState = AutomaticState.L2_SURPASSED;
-                    this.valve = 100;
+                    valve = 100;
                 } else if (this.waterLevel < Common.L1) {
                     automaticState = AutomaticState.WAIT;
-                    this.valve = 0;
+                    valve = 0;
                 }  else if (now - sinceL1 > Common.T1) {
-                    this.valve = 50;
+                    valve = 50;
                 }
                 break;
             case AutomaticState.L2_SURPASSED:
                 if (this.waterLevel < Common.L2) {
                     automaticState = AutomaticState.L1_SURPASSED;
-                    this.valve = 50;
+                    valve = 50;
                     sinceL1 = now;
                 }
                 break;
-        }
+        }    
     }
 
     @Override

@@ -36,7 +36,7 @@ public class MeasurementsHandler implements HttpHandler {
                 n = Integer.parseInt(q.substring(5));
             }
 
-            List<Integer> values =
+            List<Float> values =
                     controller.getMeasurements(n);
 
             //build the json with all the measurments

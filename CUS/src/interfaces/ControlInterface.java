@@ -15,7 +15,7 @@ public interface ControlInterface {
 
     boolean isConnected();
 
-    List<Integer> getMeasurements(int n);
+    List<Float> getMeasurements(int n);
 
     void setWaterLevel(float waterLevel);
 

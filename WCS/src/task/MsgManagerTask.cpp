@@ -32,7 +32,6 @@ void MsgManagerTask::receive(){
                 return;
             }
 
-
             String stateToken = msg.substring(0, sep);
             String degreesToken = msg.substring(sep + 1);
 

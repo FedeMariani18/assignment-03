@@ -16,6 +16,11 @@ class PotentiometerTask: public Task {
 
         int& gradi;
         int lastDegrees;
+        int stableDegrees;
+        unsigned long lastChangeTime;
+
+        const int TOLLERANCE = 5;
+        const int STABLE_TIME = 1000;
 };
 
 #endif

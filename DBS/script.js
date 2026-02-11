@@ -1,5 +1,5 @@
 const BASE_URL = "http://localhost:8080/api";
-const POLLING_INTERVAL = 2000;
+const POLLING_INTERVAL = 300;
 const N_MEASUREMENTS = 100;
 
 const stateElem = document.getElementById("system-state");

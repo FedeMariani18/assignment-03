@@ -12,13 +12,13 @@ void LCDTask::tick(){
     if(currentState != lastState || gradi != lastdegrees){
         switch(currentState){
             case State::AUTOMATIC:
-                printString("AUTOMATIC Gradi: " + String(gradi));
+                printString("AUTOMATIC Gradi:" + String(gradi) + "%");
                 break;
             case State::MANUAL:
-                printString("MANUAL Gradi: " + String(gradi));
+                printString("MANUAL Gradi: " + String(gradi) + "%");
                 break;
             case State::UNCONNECTED:
-                printString("UNCONNECTED Gradi: " + String(gradi));
+                printString("UNCONNECTED Gradi: " + String(gradi) + "%");
                 break;
         }
         lastdegrees = gradi;

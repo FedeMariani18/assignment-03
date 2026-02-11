@@ -1,15 +1,22 @@
 package serial;
 
 import interfaces.ControlInterface;
+
 import core.Common;
+import core.Common.*;
 
 public class SerialController {
     private ControlInterface controller;
     private SerialCommChannel commChannel;
+    private State lastState;
+    private int lastDegrees;
+    private Boolean first = true; 
 
     public SerialController(ControlInterface controller, String port) throws Exception {
         this.controller = controller;
         commChannel = new SerialCommChannel(port, 115200);
+        lastState = null;
+        lastDegrees = -1;
     }
 
     public void start() {
@@ -63,12 +70,17 @@ public class SerialController {
     }
 
     private void sendMsg() {
-        String msg = Common.stateToString(controller.getState())
-                    + ";"
-                    + controller.getValveOpening();
+        if(controller.getState() != lastState || controller.getValveOpening() != lastDegrees || first) {
+            first = false;
+            lastState = controller.getState();
+            lastDegrees = controller.getValveOpening();
+            String msg = Common.stateToString(controller.getState())
+                + ";"
+                + controller.getValveOpening();
 
-        if(!msg.isEmpty() && commChannel.isOpen()){
-            commChannel.sendMsg(msg);
+            if(!msg.isEmpty() && commChannel.isOpen()){
+                commChannel.sendMsg(msg);
+            }
         }
     }
 }

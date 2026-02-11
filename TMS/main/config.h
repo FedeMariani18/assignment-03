@@ -16,8 +16,8 @@
 #define MQTT_SERVER "broker.mqtt-dashboard.com"
 #define MQTT_PORT 1883
 #define MQTT_TOPIC "tms/waterLevel"
-#define WIFI_SSID "Marco's Galaxy A34 5G"
-#define WIFI_PASSWORD "pandainvernale"
+#define WIFI_SSID "iPhone di Fede"
+#define WIFI_PASSWORD "12345678"
 
 #define TANK_HEIGHT 2
 #endif

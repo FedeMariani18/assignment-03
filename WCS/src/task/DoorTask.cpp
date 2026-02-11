@@ -24,7 +24,7 @@ void DoorTask::tick(){
     }
 
     if (s == State::MANUAL || s == State::AUTOMATIC) {
-        target = gradi;
+        target = (int)(180 * ((float)gradi / 100));
     } else {
         target = 0;
     }
